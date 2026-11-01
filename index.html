@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUNIMZO TOONS | Cartoon Digital Store</title>
+<style>
+:root{
+ --bg:#0b0713;
+ --panel:#181125;
+ --panel2:#211733;
+ --line:#3b2a52;
+ --purple:#8955e8;
+ --pink:#d64de4;
+ --text:#fbf8ff;
+ --muted:#b8acc9;
+ --green:#25d366;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;
+ background:radial-gradient(ellipse at 50% -20%,#3a205d 0,transparent 45%),var(--bg);
+ color:var(--text);
+ font-family:Arial,"Noto Sans Bengali",sans-serif;
+}
+header{
+ position:sticky;
+ top:0;
+ z-index:10;
+ background:#0d0918ed;
+ backdrop-filter:blur(12px);
+ border-bottom:1px solid var(--line);
+}
+.nav{
+ max-width:1180px;
+ margin:auto;
+ padding:13px 18px;
+ display:flex;
+ align-items:center;
+ gap:14px;
+}
+.brand{font-weight:950;font-size:20px;white-space:nowrap}
+.brand span{color:#c4a5fd}
+.search{flex:1;position:relative}
+.search input{
+ width:100%;
+ padding:12px 15px 12px 39px;
+ background:#1a1327;
+ border:1px solid #49345f;
+ border-radius:12px;
+ color:white;
+ outline:none;
+}
+.search:before{
+ content:"⌕";
+ position:absolute;
+ left:13px;
+ top:3px;
+ font-size:25px;
+ color:#c4a5fd;
+}
+.cart-open{
+ background:linear-gradient(90deg,var(--purple),var(--pink));
+ border:0;
+ color:white;
+ padding:12px 15px;
+ border-radius:12px;
+ font-weight:bold;
+ white-space:nowrap;
+ cursor:pointer;
+}
+.cart-open span{
+ background:#fff3;
+ border-radius:20px;
+ padding:2px 7px;
+ margin-left:5px;
+}
+main{max-width:1180px;margin:auto;padding:23px 18px}
+.hero{
+ border:1px solid #543775;
+ border-radius:23px;
+ padding:32px;
+ background:linear-gradient(115deg,#25143a,#130d20 65%,#35194b);
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:20px;
+}
+.tag{color:#d8b4fe;font-size:12px;font-weight:bold;letter-spacing:2px}
+.hero h1{font-size:clamp(30px,5vw,48px);line-height:1.1;margin:12px 0}
+.hero h1 em{font-style:normal;color:#c4a5fd}
+.hero p{color:var(--muted);line-height:1.7;max-width:650px}
+.hero-art{font-size:70px;min-width:150px;text-align:center}
+.hero-btn{
+ display:inline-block;
+ color:white;
+ text-decoration:none;
+ background:linear-gradient(90deg,var(--purple),var(--pink));
+ padding:12px 18px;
+ border-radius:11px;
+ font-weight:bold;
+ margin-top:7px;
+}
+.quick{display:flex;gap:9px;overflow:auto;padding:18px 0 3px}
+.quick a{
+ white-space:nowrap;
+ text-decoration:none;
+ color:#eadfff;
+ background:#1c152a;
+ border:1px solid var(--line);
+ padding:9px 14px;
+ border-radius:25px;
+ font-size:13px;
+}
+.heading{margin:29px 0 13px}
+.heading h2{margin:0;font-size:23px}
+.heading p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:15px;
+}
+.product{
+ background:linear-gradient(160deg,#1e1630,#140e20);
+ border:1px solid var(--line);
+ border-radius:17px;
+ padding:12px;
+ box-shadow:0 9px 26px #0003;
+}
+.photo{
+ height:150px;
+ border:1px dashed #7957a0;
+ border-radius:12px;
+ background:radial-gradient(circle at 50% 35%,#493064,#211630 70%);
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+ color:#e4d5f7;
+}
+.photo strong{font-size:38px}
+.photo small{font-size:11px;color:#c0afd6}
+.product h3{font-size:15px;margin:11px 2px 5px}
+.id{font-size:11px;color:#a99ab9;margin:0 2px}
+.price{font-size:17px;color:#dfc5ff;font-weight:bold;margin:10px 2px}
+.price small{font-size:11px;color:var(--muted);font-weight:normal}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.btn{
+ border:0;
+ border-radius:9px;
+ padding:10px 6px;
+ font-size:12px;
+ font-weight:bold;
+ cursor:pointer;
+ text-align:center;
+ text-decoration:none;
+}
+.add{background:#39245b;color:#f7edff;border:1px solid #68459a}
+.wa{background:var(--green);color:#063018}
+.wa:before{content:"◉ "}
+.overlay{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#0009;
+ z-index:30;
+}
+.overlay.show{display:block}
+.drawer{
+ position:fixed;
+ z-index:31;
+ right:0;
+ top:0;
+ height:100%;
+ width:min(470px,100%);
+ background:#120d1d;
+ border-left:1px solid #49345f;
+ box-shadow:-15px 0 50px #0008;
+ transform:translateX(105%);
+ transition:.25s;
+ display:flex;
+ flex-direction:column;
+}
+.drawer.show{transform:translateX(0)}
+.drawer-head{
+ padding:18px;
+ border-bottom:1px solid var(--line);
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+}
+.drawer-head h2{margin:0;font-size:22px}
+.close{
+ background:#2b203b;
+ color:white;
+ border:1px solid #58406f;
+ border-radius:9px;
+ padding:8px 12px;
+ font-size:18px;
+ cursor:pointer;
+}
+.drawer-body{padding:17px;overflow:auto;flex:1}
+.empty{color:var(--muted);padding:18px 0}
+.cart-line{
+ display:grid;
+ grid-template-columns:1fr auto;
+ gap:10px;
+ padding:13px 0;
+ border-bottom:1px solid var(--line);
+}
+.cart-line b{font-size:14px}
+.cart-line small{display:block;color:var(--muted);margin-top:4px}
+.qty{display:flex;align-items:center;gap:8px;margin-top:8px}
+.qty button{
+ background:#302044;
+ color:white;
+ border:1px solid #62467f;
+ border-radius:7px;
+ width:27px;
+ height:27px;
+ cursor:pointer;
+}
+.remove{
+ background:none;
+ border:0;
+ color:#fca5a5;
+ font-size:12px;
+ cursor:pointer;
+ margin-left:8px;
+}
+.totals{
+ margin-top:15px;
+ background:#1b1428;
+ border:1px solid var(--line);
+ border-radius:12px;
+ padding:13px;
+}
+.totalrow{
+ display:flex;
+ justify-content:space-between;
+ padding:5px 0;
+ color:var(--muted);
+ font-size:14px;
+}
+.totalrow.final{
+ color:white;
+ font-weight:bold;
+ font-size:18px;
+ border-top:1px solid var(--line);
+ margin-top:7px;
+ padding-top:12px;
+}
+.couponbox{
+ margin-top:16px;
+ padding:14px;
+ background:#1b1428;
+ border:1px solid #594071;
+ border-radius:13px;
+}
+.couponbox h3{margin:0 0 6px;font-size:16px}
+.couponbox p{
+ font-size:12px;
+ color:var(--muted);
+ line-height:1.5;
+ margin:0 0 10px;
+}
+.couponform{display:flex;gap:7px}
+.couponform input{
+ min-width:0;
+ flex:1;
+ background:#100b19;
+ color:white;
+ border:1px solid #594071;
+ border-radius:9px;
+ padding:11px;
+ text-transform:uppercase;
+}
+.couponform button{
+ background:#7950c8;
+ color:white;
+ border:0;
+ border-radius:9px;
+ padding:0 13px;
+ font-weight:bold;
+ cursor:pointer;
+}
+.couponstatus{font-size:12px;margin-top:9px;min-height:17px}
+.checkout{
+ width:100%;
+ margin-top:14px;
+ background:var(--green);
+ color:#062e17;
+ border:0;
+ border-radius:11px;
+ padding:14px;
+ font-weight:bold;
+ font-size:15px;
+ cursor:pointer;
+}
+.hint{font-size:11px;color:#a99ab9;line-height:1.5;margin-top:10px}
+.notice{
+ margin-top:30px;
+ background:#29200f;
+ border-left:3px solid #facc15;
+ padding:12px;
+ border-radius:8px;
+ color:#f6e7ae;
+ font-size:12px;
+ line-height:1.6;
+}
+footer{
+ border-top:1px solid var(--line);
+ margin-top:35px;
+ padding:24px;
+ text-align:center;
+ color:#9f91b1;
+ font-size:12px;
+}
+@media(max-width:740px){
+ .nav{flex-wrap:wrap;gap:9px}
+ .brand{font-size:18px}
+ .search{order:3;flex-basis:100%}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hero{padding:24px}
+ .hero-art{font-size:52px;min-width:90px}
+}
+@media(max-width:450px){
+ main{padding:15px 11px}
+ .grid{gap:9px}
+ .product{padding:8px}
+ .photo{height:120px}
+ .product h3{font-size:13px}
+ .btn{font-size:10px;padding:10px 3px}
+ .hero-art{display:none}
+ .hero h1{font-size:31px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="nav">
+  <div class="brand">RUNIMZO <span>TOONS</span></div>
+  <div class="search">
+   <input id="search" type="search" placeholder="Search cartoon assets… / খুঁজুন">
+  </div>
+  <button class="cart-open" onclick="openCart()">
+   🛒 Cart <span id="count">0</span>
+  </button>
+ </div>
+</header>
+
+<main>
+ <section class="hero">
+  <div>
+   <div class="tag">2D ANIMATION DIGITAL STORE</div>
+   <h1>Your Cartoon World,<br><em>One Creative Store.</em></h1>
+   <p>কার্টুন ক্যারেক্টার, ব্যাকগ্রাউন্ড, প্রপস, মিউজিক ও স্টোরি রাইটিং—আপনার অ্যানিমেশনের প্রয়োজনীয় সবকিছু এক জায়গায়। পছন্দের আইটেম কার্টে যোগ করুন অথবা সরাসরি WhatsApp-এ অর্ডার করুন।</p>
+   <a class="hero-btn" href="#catalog">Explore Collection →</a>
+  </div>
+  <div class="hero-art">🎬 🎨 ✨</div>
+ </section>
+
+ <div class="quick">
+  <a href="#characters">Characters</a>
+  <a href="#backgrounds">Backgrounds</a>
+  <a href="#props">Props</a>
+  <a href="#music">Music</a>
+  <a href="#stories">Story Writing</a>
+ </div>
+
+ <div id="catalog"></div>
+
+ <div id="characters">
+  <div class="heading">
+   <h2>🧑‍🎨 Cartoon Characters</h2>
+   <p>৩টি প্রোডাক্ট স্লট</p>
+  </div>
+  <div class="grid">
+
+   <div class="product" data-name="Cartoon Character 01">
+    <div class="photo"><strong>🧑‍🚀</strong><b>Image Slot 01</b><small>Product image area</small></div>
+    <h3>Cartoon Character 01</h3>
+    <p class="id">RZT-001 · Character</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Character 01','RZT-001')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Character 01','RZT-001')">WhatsApp</button>
+    </div>
+   </div>
+
+   <div class="product" data-name="Cartoon Character 02">
+    <div class="photo"><strong>🦸</strong><b>Image Slot 02</b><small>Product image area</small></div>
+    <h3>Cartoon Character 02</h3>
+    <p class="id">RZT-002 · Character</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Character 02','RZT-002')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Character 02','RZT-002')">WhatsApp</button>
+    </div>
+   </div>
+
+   <div class="product" data-name="Cartoon Character 03">
+    <div class="photo"><strong>🧙</strong><b>Image Slot 03</b><small>Product image area</small></div>
+    <h3>Cartoon Character 03</h3>
+    <p class="id">RZT-003 · Character</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Character 03','RZT-003')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Character 03','RZT-003')">WhatsApp</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <div id="backgrounds">
+  <div class="heading">
+   <h2>🏞️ Cartoon Backgrounds</h2>
+   <p>৩টি প্রোডাক্ট স্লট</p>
+  </div>
+  <div class="grid">
+
+   <div class="product" data-name="Cartoon Background 01">
+    <div class="photo"><strong>🌳</strong><b>Image Slot 01</b><small>Product image area</small></div>
+    <h3>Cartoon Background 01</h3>
+    <p class="id">RZT-004 · Background</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Background 01','RZT-004')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Background 01','RZT-004')">WhatsApp</button>
+    </div>
+   </div>
+
+   <div class="product" data-name="Cartoon Background 02">
+    <div class="photo"><strong>🏡</strong><b>Image Slot 02</b><small>Product image area</small></div>
+    <h3>Cartoon Background 02</h3>
+    <p class="id">RZT-005 · Background</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Background 02','RZT-005')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Background 02','RZT-005')">WhatsApp</button>
+    </div>
+   </div>
+
+   <div class="product" data-name="Cartoon Background 03">
+    <div class="photo"><strong>🏙️</strong><b>Image Slot 03</b><small>Product image area</small></div>
+    <h3>Cartoon Background 03</h3>
+    <p class="id">RZT-006 · Background</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Background 03','RZT-006')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Background 03','RZT-006')">WhatsApp</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <div id="props">
+  <div class="heading">
+   <h2>🧰 Cartoon Props</h2>
+   <p>৩টি প্রোডাক্ট স্লট</p>
+  </div>
+  <div class="grid">
+
+   <div class="product" data-name="Cartoon Props 01">
+    <div class="photo"><strong>🪑</strong><b>Image Slot 01</b><small>Product image area</small></div>
+    <h3>Cartoon Props 01</h3>
+    <p class="id">RZT-007 · Props</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Props 01','RZT-007')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Props 01','RZT-007')">WhatsApp</button>
+    </div>
+   </div>
+
+   <div class="product" data-name="Cartoon Props 02">
+    <div class="photo"><strong>🚲</strong><b>Image Slot 02</b><small>Product image area</small></div>
+    <h3>Cartoon Props 02</h3>
+    <p class="id">RZT-008 · Props</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Props 02','RZT-008')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Props 02','RZT-008')">WhatsApp</button>
+    </div>
+   </div>
+
+   <div class="product" data-name="Cartoon Props 03">
+    <div class="photo"><strong>🎒</strong><b>Image Slot 03</b><small>Product image area</small></div>
+    <h3>Cartoon Props 03</h3>
+    <p class="id">RZT-009 · Props</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Props 03','RZT-009')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Props 03','RZT-009')">WhatsApp</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <div id="music">
+  <div class="heading">
+   <h2>🎵 Cartoon Music</h2>
+   <p>৩টি প্রোডাক্ট স্লট</p>
+  </div>
+  <div class="grid">
+
+   <div class="product" data-name="Cartoon Music 01">
+    <div class="photo"><strong>🎼</strong><b>Music Image Slot 01</b><small>Cover image area</small></div>
+    <h3>Cartoon Music 01</h3>
+    <p class="id">RZT-010 · Music</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Music 01','RZT-010')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Music 01','RZT-010')">WhatsApp</button>
+    </div>
+   </div>
+
+   <div class="product" data-name="Cartoon Music 02">
+    <div class="photo"><strong>🎧</strong><b>Music Image Slot 02</b><small>Cover image area</small></div>
+    <h3>Cartoon Music 02</h3>
+    <p class="id">RZT-011 · Music</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Music 02','RZT-011')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Music 02','RZT-011')">WhatsApp</button>
+    </div>
+   </div>
+
+   <div class="product" data-name="Cartoon Music 03">
+    <div class="photo"><strong>🎹</strong><b>Music Image Slot 03</b><small>Cover image area</small></div>
+    <h3>Cartoon Music 03</h3>
+    <p class="id">RZT-012 · Music</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Music 03','RZT-012')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Music 03','RZT-012')">WhatsApp</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <div id="stories">
+  <div class="heading">
+   <h2>✍️ Cartoon Story Writing</h2>
+   <p>১টি সার্ভিস স্লট</p>
+  </div>
+  <div class="grid">
+   <div class="product" data-name="Cartoon Story Writing">
+    <div class="photo"><strong>📖</strong><b>Story Image Slot</b><small>Service image area</small></div>
+    <h3>Cartoon Story Writing</h3>
+    <p class="id">RZT-013 · Story Writing</p>
+    <div class="price">₹99 <small>/ demo price</small></div>
+    <div class="actions">
+     <button class="btn add" onclick="add('Cartoon Story Writing','RZT-013')">＋ Add to Cart</button>
+     <button class="btn wa" onclick="directWA('Cartoon Story Writing','RZT-013')">WhatsApp</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <div class="notice">
+  নোট: ₹99 প্রতিটি প্রোডাক্টের নমুনা দাম। চূড়ান্ত ব্যবহারের আগে নিজের আসল দাম বসিয়ে নেবে।
+ </div>
+</main>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<aside class="drawer" id="drawer" aria-label="Shopping cart">
+ <div class="drawer-head">
+  <h2>🛒 Your Cart / কার্ট</h2>
+  <button class="close" onclick="closeCart()">✕</button>
+ </div>
+
+ <div class="drawer-body">
+  <div id="items" class="empty">তোমার কার্ট এখন খালি।</div>
+
+  <div class="totals">
+   <div class="totalrow">
+    <span>Subtotal</span>
+    <b id="subtotal">₹0</b>
+   </div>
+   <div class="totalrow">
+    <span id="discountlabel">Coupon discount</span>
+    <b id="discount">−₹0</b>
+   </div>
+   <div class="totalrow final">
+    <span>Final Total</span>
+    <b id="final">₹0</b>
+   </div>
+  </div>
+
+  <div class="couponbox">
+   <h3>🎟️ Apply Coupon Code</h3>
+   <p>তোমার কাছে থাকা কুপন কোড এখানে লিখে Apply চাপো। সঠিক কোড হলে ছাড় মোট দাম থেকে কেটে যাবে।</p>
+   <div class="couponform">
+    <input id="coupon" placeholder="Enter coupon code" autocomplete="off">
+    <button onclick="applyCoupon()">APPLY</button>
+   </div>
+   <div id="couponstatus" class="couponstatus"></div>
+  </div>
+
+  <button class="checkout" onclick="checkout()">WhatsApp-এ অর্ডার করুন →</button>
+
+  <div class="hint">
+   অর্ডার WhatsApp-এ পাঠানোর আগে কার্ট ও ছাড় দেখে নাও। এরপর বিক্রেতা পেমেন্ট QR পাঠাবেন; পেমেন্ট যাচাই করে ম্যানুয়ালি ফাইল পাঠাবেন।
+  </div>
+ </div>
+</aside>
+
+<footer>
+ RUNIMZO TOONS · Dark Purple & Black Store<br>
+ WhatsApp: +91 90833 83162
+</footer>
+
+<script>
+const PRICE = 99;
+const PHONE = '919083383162';
+
+const coupons = {
+ 'RUNIMZO45TY3':10,
+ 'FTETYUT3467TY':6,
+ 'ATEGRU456YU':20
+};
+
+const cart = {};
+let applied = null;
+
+function openCart(){
+ document.getElementById('overlay').classList.add('show');
+ document.getElementById('drawer').classList.add('show');
+ render();
+}
+
+function closeCart(){
+ document.getElementById('overlay').classList.remove('show');
+ document.getElementById('drawer').classList.remove('show');
+}
+
+function add(name,id){
+ if(!cart[id]){
+  cart[id]={name:name,id:id,qty:0};
+ }
+ cart[id].qty++;
+ render();
+ openCart();
+}
+
+function change(id,delta){
+ if(!cart[id])return;
+ cart[id].qty+=delta;
+ if(cart[id].qty<=0){
+  delete cart[id];
+ }
+ render();
+}
+
+function render(){
+ let count=0;
+ let subtotal=0;
+ let html='';
+
+ Object.values(cart).forEach(x=>{
+  count+=x.qty;
+  subtotal+=x.qty*PRICE;
+
+  html+=`
+   <div class="cart-line">
+    <div>
+     <b>${x.name}</b>
+     <small>${x.id} · ₹${PRICE} × ${x.qty} = ₹${x.qty*PRICE}</small>
+     <div class="qty">
+      <button onclick="change('${x.id}',-1)">−</button>
+      <b>${x.qty}</b>
+      <button onclick="change('${x.id}',1)">＋</button>
+      <button class="remove" onclick="deleteItem('${x.id}')">Remove</button>
+     </div>
+    </div>
+    <b>₹${x.qty*PRICE}</b>
+   </div>
+  `;
+ });
+
+ document.getElementById('count').textContent=count;
+
+ document.getElementById('items').innerHTML=
+  html || '<div class="empty">তোমার কার্ট এখন খালি।</div>';
+
+ let discount=applied?
+  Math.round(subtotal*applied.rate/100):0;
+
+ document.getElementById('subtotal').textContent='₹'+subtotal;
+ document.getElementById('discount').textContent='−₹'+discount;
+
+ document.getElementById('discountlabel').textContent=
+  applied?
+  `Coupon (${applied.code} · ${applied.rate}%)`:
+  'Coupon discount';
+
+ document.getElementById('final').textContent=
+  '₹'+(subtotal-discount);
+}
+
+function deleteItem(id){
+ delete cart[id];
+ render();
+}
+
+function applyCoupon(){
+ const code=document.getElementById('coupon').value.trim().toUpperCase();
+ const status=document.getElementById('couponstatus');
+
+ if(!Object.keys(cart).length){
+  status.style.color='#fbbf24';
+  status.textContent='আগে কার্টে প্রোডাক্ট যোগ করো।';
+  return;
+ }
+
+ if(coupons[code]){
+  applied={code:code,rate:coupons[code]};
+  status.style.color='#86efac';
+  status.textContent=`সফল! ${coupons[code]}% ছাড় যোগ হয়েছে।`;
+  render();
+ }else{
+  applied=null;
+  status.style.color='#fca5a5';
+  status.textContent='কুপন কোডটি সঠিক নয়। আবার চেষ্টা করো।';
+  render();
+ }
+}
+
+function waUrl(message){
+ return 'https://wa.me/'+PHONE+'?text='+encodeURIComponent(message);
+}
+
+function directWA(name,id){
+ const message=
+ `Hello RUNIMZO TOONS!
+ আমি এই প্রোডাক্টটি কিনতে চাই।
+
+ Product: ${name}
+ Product ID: ${id}
+
+ দয়া করে বিস্তারিত জানাবেন।`;
+
+ window.open(waUrl(message),'_blank');
+}
+
+function checkout(){
+ if(!Object.keys(cart).length){
+  alert('কার্টে আগে প্রোডাক্ট যোগ করো।');
+  return;
+ }
+
+ let subtotal=0;
+ let lines=[];
+
+ Object.values(cart).forEach(x=>{
+  let total=x.qty*PRICE;
+  subtotal+=total;
+
+  lines.push(
+   `${x.name} | ID: ${x.id} | Quantity: ${x.qty} | Unit price: ₹${PRICE} | Total: ₹${total}`
+  );
+ });
+
+ let discount=applied?
+  Math.round(subtotal*applied.rate/100):0;
+
+ let msg=
+ `নতুন অর্ডার — RUNIMZO TOONS
+
+ ${lines.join('\n')}
+
+ Subtotal: ₹${subtotal}
+ Coupon: ${applied?applied.code:'Not applied'}
+ Discount: ${applied?applied.rate+'%':'0%'}
+ Discount amount: ₹${discount}
+ Final total: ₹${subtotal-discount}
+
+ Payment status: Pending
+ Order status: New Order
+
+ আমার অর্ডারটি কনফার্ম করে পেমেন্টের QR কোড পাঠাবেন।`;
+
+ window.open(waUrl(msg),'_blank');
+}
+
+document.getElementById('search').addEventListener('input',e=>{
+ let q=e.target.value.toLowerCase();
+
+ document.querySelectorAll('.product').forEach(p=>{
+  p.style.display=
+   p.dataset.name.toLowerCase().includes(q)?'':'none';
+ });
+});
+</script>
+
+</body>
+</html>
