@@ -787,11 +787,11 @@ function checkout(){
  let lines=[];
 
  Object.values(cart).forEach(x=>{
-  let total=x.qty*PRICE;
+  let total=x.qty*x.price;
   subtotal+=total;
 
   lines.push(
-   `${x.name} | ID: ${x.id} | Quantity: ${x.qty} | Unit price: ₹${PRICE} | Total: ₹${total}`
+  `${x.name} | ID: ${x.id} | Quantity: ${x.qty} | Unit price: ₹${x.price} | Total: ₹${total}`
   );
  });
 
