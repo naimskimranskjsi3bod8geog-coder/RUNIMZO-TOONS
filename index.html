@@ -659,12 +659,22 @@ function closeCart(){
 }
 
 function add(name,id){
- if(!cart[id]){
-  cart[id]={name:name,id:id,qty:0};
- }
- cart[id].qty++;
- render();
- openCart();
+  if(!cart[id]){
+    let price = PRICE;
+
+    if(id === 'RZT-001'){
+      price = 501;
+    }
+
+    if(id === 'RZT-005'){
+      price = 401;
+    }
+
+    cart[id]={name:name,id:id,price:price,qty:0};
+  }
+  cart[id].qty++;
+  render();
+  openCart();
 }
 
 function change(id,delta){
@@ -683,13 +693,13 @@ function render(){
 
  Object.values(cart).forEach(x=>{
   count+=x.qty;
-  subtotal+=x.qty*PRICE;
+  subtotal+=x.qty*x.price;
 
   html+=`
    <div class="cart-line">
     <div>
      <b>${x.name}</b>
-     <small>${x.id} · ₹${PRICE} × ${x.qty} = ₹${x.qty*PRICE}</small>
+     <small>${x.id} · ₹${x.price} × ${x.qty} = ₹${x.qty*x.price}</small>
      <div class="qty">
       <button onclick="change('${x.id}',-1)">−</button>
       <b>${x.qty}</b>
@@ -697,7 +707,7 @@ function render(){
       <button class="remove" onclick="deleteItem('${x.id}')">Remove</button>
      </div>
     </div>
-    <b>₹${x.qty*PRICE}</b>
+    <b>₹${x.qty*x.price}</b>
    </div>
   `;
  });
